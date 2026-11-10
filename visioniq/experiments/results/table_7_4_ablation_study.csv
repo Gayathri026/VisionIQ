@@ -1,0 +1,6 @@
+Variant,Routing F1,Routing Precision,Routing Recall,Answer Correctness,Evidence Support,Median Latency (ms),p95 Latency (ms),Mean Agents
+Full VisionIQ (Proposed Adaptive),0.5806,0.5764,0.7222,0.6250,0.7222,2721.26,2995.04,3.17
+Without cost and latency penalties (beta=gamma=0),0.5788,0.5590,0.8056,0.6250,0.7222,2755.52,3289.77,3.62
+Without deterministic fallback,0.4972,0.4930,0.6389,0.6250,0.7222,2724.66,3146.31,2.92
+Without evidence aggregation,0.5806,0.5764,0.7222,0.6250,0.7222,2846.21,3442.63,2.17
+Without retrieval grounding (z_rag=0),0.5806,0.5764,0.7222,0.6250,0.7222,2788.38,3670.30,3.12

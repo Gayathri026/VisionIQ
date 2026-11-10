@@ -1,0 +1,6 @@
+Ablation Variant,Routing F1,Median Latency (ms),p95 Latency (ms),Mean Agents,Evidence Support,Task Correctness
+adaptive,0.5806,2721.26,2995.04,3.17,0.7222,0.625
+ablation_no_cost,0.5788,2755.52,3289.77,3.62,0.7222,0.625
+ablation_no_rag,0.5806,2788.38,3670.3,3.12,0.7222,0.625
+ablation_no_evidence_aggregation,0.5806,2846.21,3442.63,2.17,0.7222,0.625
+ablation_no_fallback,0.4972,2724.66,3146.31,2.92,0.7222,0.625

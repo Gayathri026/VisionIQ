@@ -1,0 +1,1234 @@
+VisionIQ: An Adaptive Multi-Agent Vision Intelligence Framework with Dynamic Orchestration and Cost-Aware Query Routing
+PROJECT PHASE -I REPORT
+Submitted by
+GAYATHRI R
+727623BCS065
+MONICA T S
+727623BCS083
+DHAMODHARAN R
+727624BCS308
+in partial fulfillment of the requirements for the degree of
+of
+BACHELOR OF ENGINEERING
+in
+COMPUTER SCIENCE AND ENGINEERING
+Dr. MAHALINGAM COLLEGE OF ENGINEERING AND TECHNOLOGY
+AN AUTONOMOUS INSTITUTION
+AFFILIATED TO ANNA UNIVERSITY 
+CHENNAI 600 025
+OCTOBER 2026
+Dr. MAHALINGAM COLLEGE OF ENGINEERING AND 
+TECHNOLOGY, POLLACHI -642 003
+(AN AUTONOMOUS INSTITUTION AFFILIATED TO
+ ANNA UNIVERSITY, CHENNAI - 600 025)
+BONAFIDE CERTIFICATE
+Certified that this project report titled “VisionIQ: An Adaptive Multi-Agent Vision Intelligence Framework with Dynamic Orchestration and Cost-Aware Query Routing” is the bonafide work of
+GAYATHRI R
+727623BCS065
+MONICA T S
+727623BCS083
+DHAMODHARAN R
+727624BCS308
+who carried out the project work under my supervision.
+SUPERVISOR
+Ms. GAYATHRI S,
+Assistant Professor (AP)
+Department of CSE
+Dr.Mahalingam College of Engineering and Technology
+Pollachi - 642003
+HEAD OF THE DEPARTMENT
+Dr.D.SIVAGANESAN., Ph.D.,
+Professor
+Department of CSE
+Dr.Mahalingam College of Engineering and Technology
+Pollachi - 642003
+Submitted for the Autonomous End Semester Project Phase –I Viva-Voce Examination held on ____________________
+INTERNAL EXAMINEREXTERNAL EXAMINER
+Dr. Mahalingam College of Engineering and Technology, Pollachi-642003
+Academic Year: 2026 - 2027
+TRL, SDG and Similarity Compliance Certificate
+Project Title: VisionIQ: An Adaptive Multi-Agent Vision Intelligence Framework with Dynamic Orchestration and Cost-Aware Query Routing
+Course Code: 23CSP701
+Department and Semester: CSE / VII
+Technology Readiness Level (TRL) of the Project : ______________ 
+Sustainability Development Goals (SDG) - Goal Name : ______________ 
+Similarity % from Turnitin Software : ______________ 
+We hereby declare that this project report is original and complies with the institution's similarity guidelines.
+S.No.
+Name and Roll Number of Students
+Signature of the Students
+1.
+GAYATHRI R (727623BCS065)
+2.
+MONICA T S (727623BCS083)
+3.
+DHAMODHARAN R (727624BCS308)
+Verified by
+Name & Signature of the Guide
+(Ms. GAYATHRI S)
+Head of the Department
+(Dr. D. SIVAGANESAN)
+Endorsed by
+INTERNAL EXAMINEREXTERNAL EXAMINER
+ABSTRACT
+Vision-language applications often execute fixed sets of computer vision operations regardless of the user's query, potentially increasing computational overhead, response latency, and the generation of irrelevant visual evidence. To address these limitations, this project presents VisionIQ, an adaptive, query-aware multi-agent vision intelligence framework that dynamically selects and coordinates specialised vision agents according to the semantic requirements of a natural-language query. The framework integrates a React and Vite frontend with a FastAPI backend, LangGraph-based conditional orchestration, YOLOv11 for object detection, EasyOCR for text extraction, OpenCV-based heuristic anomaly analysis, scene understanding, retrieval-augmented grounding, root-cause analysis, and recommendation generation. A deterministic fallback mechanism supports query routing when language-model-based intent classification is unavailable. The orchestration strategy uses a weighted routing score to balance query relevance, evidence capability, computational cost, and estimated execution latency. SQLite and SQLAlchemy support the storage of query history and execution traces. The system is designed to provide query-relevant visual findings, evidence-grounded explanations, and recommendations based on the outputs of the selected agents. This report presents the problem definition, literature review, system architecture, routing algorithm, implementation details, and evaluation methodology. Although the framework has been implemented, quantitative claims regarding detection accuracy, response latency, computational savings, and agent-selection efficiency require validation through controlled experiments using documented benchmark results.
+ACKNOWLEDGEMENT
+We would like to express our sincere thanks and a deep sense of gratitude to the Management, Dr. S. V. Subramanian, Ph.D., Secretary and Dr. P. Govindasamy, Ph.D., Joint Secretary & Principal for providing us the necessary facilities to carry out this project.
+We are proudly rendering our thanks to Dr. A. Senthilkumar, Ph.D., Vice Principal for the facilities and the encouragement given by him to the progress and completion of our project.
+We proudly render our immense gratitude to Dr. K. Vijayakumar, Ph.D., Associate Dean Academics for his effective leadership, encouragement and guidance in the project.
+We also heartily thank Dr. D. Sivaganesan, Ph.D., Head of the Department of Computer Science and Engineering, for providing us the facilities for the completion of this work.
+We express our deep sense of gratitude with sincerity to our project guide Ms. Gayathri S, Assistant Professor (AP), Department of Computer Science and Engineering, for the valuable suggestions and guidance offered during the course of the project.
+We sincerely thank our project coordinator, Mr. K. Prabhu, M.Tech., Assistant Professor (SS), Department of Computer Science and Engineering, for his valuable support and encouragement in developing this project successfully.
+Finally, we thank all those who had contributed directly and indirectly towards the success of this project.
+TABLE OF CONTENTS
+CHAPTER NO.
+TITLE
+PAGE NO.
+ABSTRACT
+i
+ACKNOWLEDGEMENT
+ii
+LIST OF TABLES
+vi
+LIST OF FIGURES
+vii
+LIST OF ABBREVIATIONS
+viii
+1
+INTRODUCTION
+2
+1.1
+Introduction to Intelligent Computer Vision
+2
+1.2
+Background and Motivation
+2
+1.3
+Limitations of Conventional Fixed Computer-Vision Pipelines
+3
+1.4
+Problem Statement
+3
+1.5
+Need for Query-Aware and Cost-Aware Orchestration
+4
+1.6
+Aim and Objectives
+4
+1.7
+Scope of the Project
+5
+1.8
+Intended Applications
+5
+1.9
+Organization of the Report
+5
+2
+LITERATURE SURVEY
+7
+2.1
+Overview of the Literature
+7
+2.2
+Object Detection and the YOLO Family
+7
+2.3
+Optical Character Recognition and EasyOCR
+8
+2.4
+Image Processing and OpenCV-Based Visual Cues
+8
+2.5
+Deep Learning Foundations and Benchmarks
+8
+2.6
+Language-Model Tool Use and Agent Orchestration
+9
+2.7
+LangGraph and Conditional Workflow Execution
+9
+2.8
+Retrieval-Augmented Generation
+10
+2.9
+Dynamic and Cost-Aware Model and Agent Routing
+10
+2.10
+Evaluation of Multi-Agent and Vision-Language Systems
+11
+2.11
+Research Gap
+11
+3
+EXISTING SYSTEM
+13
+3.1
+Overview of the Existing System
+13
+3.2
+Block Diagram of the Existing System
+14
+3.3
+Drawbacks of the Existing System
+14
+3.4
+Need for an Adaptive System
+15
+4
+PROPOSED SYSTEM
+17
+4.1
+Overview of the Proposed System
+17
+4.2
+Architecture and Data Flow
+18
+4.3
+Natural-Language Query Interpretation
+20
+4.4
+Intent Classification and Deterministic Fallback
+20
+4.5
+Dynamic Cost-Aware Agent Planner
+20
+4.6
+Specialist Agent Execution
+21
+4.7
+Evidence Aggregation and Provenance
+21
+4.8
+Retrieval-Augmented Contextual Grounding
+21
+4.9
+Root-Cause Analysis and Recommendation Generation
+22
+4.10
+Persistence of Query History and Execution Traces
+22
+4.11
+CPU/CUDA Fallback and Agent-Level Error Handling
+22
+4.12
+Expected Benefits and Design Limitations
+22
+5
+ALGORITHMS AND METHODOLOGY
+24
+5.1
+Overview of the Methodology
+24
+5.2
+Query-Aware Intent Classification
+24
+5.3
+Cost-Aware Routing Score
+24
+5.4
+LangGraph Conditional Orchestration
+26
+5.5
+YOLOv11 Object Detection
+27
+5.6
+EasyOCR Text Extraction
+28
+5.7
+OpenCV Heuristic Anomaly Analysis
+28
+5.8
+Retrieval-Augmented Generation
+28
+5.9
+Evidence Aggregation, RCA and Recommendations
+29
+5.10
+Error Handling and Persistence
+29
+5.11
+Complete Orchestration Algorithm
+30
+5.12
+Illustrative Example of Query-Specific Agent Selection
+32
+6
+IMPLEMENTATION AND SETUP
+34
+6.1
+Implementation Overview and Status
+34
+6.2
+Development Environment and Dependencies
+35
+6.3
+Request and Response Flow
+35
+6.4
+Backend and Frontend Integration
+36
+6.5
+Model Integration
+36
+6.6
+Query Routing and Conditional Execution
+36
+6.7
+Error Handling
+36
+6.8
+Data Storage and Trace Metadata
+36
+6.9
+Setup Procedure (Conceptual)
+37
+6.10
+Implementation Details to Be Verified Against the Codebase
+37
+7
+RESULTS AND DISCUSSION
+39
+7.1
+Evaluation Objectives
+39
+7.2
+Proposed Experimental Design
+39
+7.3
+Dataset and Procedure
+40
+7.4
+Evaluation Metrics
+41
+7.5
+Latency Reduction
+41
+7.6
+Results Table
+42
+7.7
+Ablation Study
+42
+7.8
+Discussion: What Each Metric Would Establish
+42
+7.9
+Limitations and Threats to Validity
+43
+7.10
+Current Status
+43
+8
+CONCLUSION AND FUTURE ENHANCEMENT
+45
+8.1
+Conclusion
+45
+8.2
+Future Enhancement
+45
+REFERENCES
+47
+APPENDIX A (PROPOSED EVALUATION CHECKLIST)
+50
+APPENDIX B (GLOSSARY)
+52
+APPENDIX C (PROJECT TEAM DETAILS)
+54
+LIST OF TABLES
+TABLE NO.
+TITLE
+PAGE NO.
+4.1
+Specialist agents and components of VisionIQ
+21
+5.1
+Symbols used in the routing formulation
+24
+5.2
+Hypothetical numerical illustration of Equation (5.1) (not measured values)
+25
+5.3
+Illustrative query-specific agent selection (design example, not experimental results)
+32
+6.1
+Status of components as documented in the source material
+34
+6.2
+Technology stack and module responsibilities
+35
+7.1
+Configurations compared in the evaluation
+39
+7.2
+Evaluation metrics and definitions
+41
+7.3
+Evaluation results — to be populated after experimental evaluation
+42
+7.4
+Planned ablation variants — results to be populated after experimental evaluation
+42
+LIST OF FIGURES
+FIGURE NO.
+TITLE
+PAGE NO.
+3.1
+Block diagram of the Existing System (fixed pipeline)
+14
+4.1
+Architecture of the proposed VisionIQ system
+19
+5.2
+LangGraph conditional execution with shared state
+27
+5.1
+Query-to-agent routing workflow
+31
+7.1
+Evaluation methodology
+40
+LIST OF ABBREVIATIONS
+API
+Application Programming Interface
+CER
+Character Error Rate
+COCO
+Common Objects in Context
+CPU
+Central Processing Unit
+CRNN
+Convolutional Recurrent Neural Network
+CSE
+Computer Science and Engineering
+CUDA
+Compute Unified Device Architecture
+DETR
+Detection Transformer
+F1
+Harmonic Mean of Precision and Recall
+IoU
+Intersection over Union
+LLM
+Large Language Model
+mAP
+Mean Average Precision
+OCR
+Optical Character Recognition
+RAG
+Retrieval-Augmented Generation
+RCA
+Root-Cause Analysis
+SDG
+Sustainable Development Goals
+TRL
+Technology Readiness Level
+WER
+Word Error Rate
+YOLO
+You Only Look Once
+CHAPTER 1
+INTRODUCTION
+CHAPTER 1
+INTRODUCTION
+1.1INTRODUCTION TO INTELLIGENT COMPUTER VISION
+Computer vision is a branch of artificial intelligence that enables machines to extract meaningful information from images and videos. Early systems were designed for specific tasks, such as image classification or object detection. Modern applications require greater flexibility, allowing users to upload an image and ask questions in natural language. For example, a user may ask, “How many boxes are on this shelf?”, “What does the label say?”, “Is there anything unusual about this surface?” or “What should be checked next?”. Answering these questions requires different combinations of visual perception, text recognition, contextual interpretation, and reasoning.
+Individual visual perception tasks are supported by established models and libraries. Single-stage detectors from the YOLO family can locate objects efficiently [1], optical character recognition (OCR) libraries such as EasyOCR extract printed and scene text [2], and OpenCV provides a broad collection of classical image-processing operations [3]. However, selecting the appropriate tools for a given query and combining their outputs into a relevant, evidence-supported response remain important challenges. VisionIQ addresses this challenge through query-aware orchestration, dynamically selecting and coordinating specialised vision agents according to the user's requirements.
+.
+1.2BACKGROUND AND MOTIVATION
+Large language models (LLMs) have shown that natural language can serve as a general interface to software tools. Research on tool use and reasoning has demonstrated that a language model can decide when to call an external component and how to use its result [4], [5], [6]. This idea is attractive for vision applications, where specialised models already exist for detection, text extraction and image analysis. A language-driven controller can in principle choose among them.
+The motivation for VisionIQ comes from a simple observation: running every available model for every request is wasteful. A question about the text on a shipping label does not need an object detector to enumerate every item in the scene, and a request to count objects does not need OCR. Each unnecessary model call consumes computation and adds waiting time. In addition, outputs that are unrelated to the question make it harder for a reviewer to see which evidence actually supports the final answer. VisionIQ therefore treats orchestration, that is, the decision of which specialist to run and when, as a first-class component of the system rather than as an afterthought.
+1.3LIMITATIONS OF CONVENTIONAL FIXED COMPUTER-VISION PIPELINES
+A conventional vision application is usually built as a fixed pipeline in which a predefined sequence of modules processes every input in the same way. Fixed pipelines are simple to build and easy to reason about, but they have several well-known design limitations:
+Unnecessary computation: modules that are irrelevant to the question are still executed.
+Higher latency and resource use: the response time is governed by the slowest and most numerous components, regardless of need.
+Weak intent alignment: the pipeline does not model what the user actually asked, so the returned evidence may not match the intent.
+Poor traceability: when all outputs are merged, it is hard to identify which component supports which part of the answer.
+Fragile failure behaviour: if one component fails, the whole request may fail instead of degrading gracefully.
+These limitations follow from the design of the fixed-pipeline approach in general. They are discussed in this report as design considerations; they are not presented as the outcome of a controlled experiment.
+1.4PROBLEM STATEMENT
+Vision-language applications that run a fixed collection of computer-vision operations for every query can waste computation, increase response time and return evidence that is not relevant to the user’s intent. There is a need for a system that interprets a natural-language query, estimates which specialist vision capabilities are actually required, executes only those capabilities together with any necessary complementary evidence, tolerates partial failures, and preserves a record of what was executed and why.
+1.5NEED FOR QUERY-AWARE AND COST-AWARE ORCHESTRATION
+Query awareness means that the system first estimates what the user needs, for example object localisation, text reading, a scene description or a possible anomaly, and then activates only the matching agents. Cost awareness adds a second consideration: even among relevant agents, each one has a computational cost and an expected latency. A planner that ignores these costs may select an expensive agent whose marginal contribution to the answer is small.
+Combining both ideas yields a planner that rewards agents that are relevant and capable of producing useful evidence, and penalises agents that are expensive or slow. The idea of choosing among models according to cost has been studied for language models [7], [8]; VisionIQ applies a related principle to a set of heterogeneous vision agents. Because invoking fewer agents may also omit necessary evidence, the design includes mandatory dependencies and fallback rules, and any efficiency gain must be reported together with task-quality measurements.
+1.6AIM AND OBJECTIVES
+The aim of the project is to design and implement VisionIQ, an adaptive multi-agent vision intelligence framework that answers natural-language questions about images by selecting and coordinating specialised vision agents according to query relevance and estimated execution cost.
+The specific objectives are:
+To interpret a natural-language query and estimate the visual capabilities it requires, using LLM-based intent classification with a deterministic fallback.
+To formulate a cost-aware routing score that balances relevance and evidence capability against computational cost and latency.
+To orchestrate the selected agents with LangGraph using shared state, conditional branches and partial recovery from agent failures.
+To integrate heterogeneous specialist agents for object detection (YOLOv11), text extraction (EasyOCR), heuristic anomaly cues (OpenCV) and scene understanding.
+To aggregate agent outputs with provenance and, where useful, ground the response with retrieval-augmented generation (RAG), producing a qualified answer, root-cause analysis (RCA) and recommendations.
+To persist query history and execution traces in SQLite through SQLAlchemy to support debugging and evaluation.
+To define a reproducible evaluation protocol for perception quality, routing quality, latency, agent utilisation and failure recovery.
+1.7SCOPE OF THE PROJECT
+The project covers the design and implementation of VisionIQ, an adaptive, query-aware multi-agent vision intelligence framework. It includes natural-language query interpretation, cost-aware agent selection, conditional orchestration using LangGraph, and the integration of specialised vision components for object detection, text extraction, scene understanding, and preliminary visual anomaly analysis. The framework combines the outputs of selected agents to generate relevant responses, contextual explanations, and recommendations based on the available evidence. The web application integrates a React and Vite frontend with a FastAPI backend, while SQLite and SQLAlchemy support query-history and execution-trace persistence. The scope also includes error handling, fallback routing, and an evaluation methodology for assessing agent selection, response quality, and computational efficiency. The OpenCV-based anomaly analysis relies on image-processing heuristics and should not be considered a validated industrial defect classifier. Training new detection or OCR models is outside the scope of the project, as existing models are integrated as specialised components.
+1.8INTENDED APPLICATIONS
+The framework is intended for settings in which users ask varied questions about images and where selective, explainable analysis is valuable. Examples include retail shelf and label inspection, document and signage reading, preliminary visual screening of manufactured parts, facility and equipment inspection support, and educational demonstrations of multi-agent vision systems. For any safety-critical use, the output should be treated as decision support and reviewed by a human inspector.
+1.9ORGANIZATION OF THE REPORT
+Chapter 2 surveys the literature on detection, OCR, image processing, tool use, orchestration, retrieval, cost-aware routing and evaluation, and ends with the research gap. Chapter 3 describes the conventional fixed-pipeline system and its limitations. Chapter 4 presents the proposed VisionIQ system, its architecture and its modules. Chapter 5 explains the algorithms and methodology, including the routing score and the orchestration pseudocode. Chapter 6 describes the implementation and setup. Chapter 7 presents the evaluation design and the structure for results, which are to be populated after experiments. Chapter 8 concludes the report and outlines future enhancements. References and appendices follow.
+CHAPTER 2
+LITERATURE SURVEY
+CHAPTER 2
+LITERATURE SURVEY
+2.1OVERVIEW OF THE LITERATURE
+This chapter reviews the research and technical documentation that underpin VisionIQ. For each entry, the survey states the objective of the work, its core technique, its relevance to VisionIQ and its limitation or unresolved issue. Software documentation is cited as documentation and is not treated as peer-reviewed research. The chapter concludes with the research gap that motivates the project.
+2.2OBJECT DETECTION AND THE YOLO FAMILY
+You Only Look Once (YOLO). Objective: Redmon et al. aimed to make object detection fast enough for real-time use [1]. Technique: the image is processed in a single network evaluation that predicts bounding boxes and class probabilities directly, instead of running separate region-proposal and classification stages. Relevance: this single-stage formulation is the foundation of the YOLOv11 detector used by VisionIQ’s object-detection agent. Limitation: the original design imposed spatial constraints that made small, closely grouped objects difficult, and a detector is limited to the object categories it was trained on.
+DETR. Objective: Carion et al. reformulated detection as a direct set-prediction problem [9]. Technique: a transformer encoder–decoder predicts a set of objects and is trained with a bipartite matching loss, which removes hand-designed components such as anchor generation and non-maximum suppression. Relevance: it shows that detection can be formulated differently from YOLO; VisionIQ nevertheless uses a YOLO-family detector as a specialist rather than claiming one detector is best for all questions. Limitation: the original model required long training schedules and was less effective on small objects.
+YOLO11 documentation. Objective: the Ultralytics documentation describes the YOLO11 model family and its use [10]. Technique: pretrained detection models are loaded through a Python interface and return labels, confidence scores and bounding-box coordinates for an input image. Relevance: this is the documented interface through which VisionIQ’s detection agent obtains its evidence. Limitation: it is software documentation rather than a peer-reviewed paper, and pretrained checkpoints recognise only their training categories, so unusual objects may be missed or mislabelled.
+2.3OPTICAL CHARACTER RECOGNITION AND EASYOCR
+CRNN for scene text. Objective: Shi, Bai and Yao proposed a trainable network for recognising text sequences in images [11]. Technique: convolutional layers extract features, recurrent layers model the sequence, and a transcription layer converts the predictions into text, without separate character segmentation. Relevance: it represents the family of sequence-recognition methods on which practical OCR toolkits are built. Limitation: recognition quality degrades with distortion, low resolution and unusual fonts, and the work focuses on recognition rather than on deciding when OCR is needed.
+EasyOCR. Objective: EasyOCR is an open-source library intended to make OCR available through a simple interface for many languages [2]. Technique: it combines text detection and text recognition models and returns recognised strings, usually with positions and confidence values. Relevance: VisionIQ’s OCR agent uses it to read labels, documents and signs. Limitation: output quality depends on image quality, language configuration and layout; errors can propagate into later reasoning, which is why OCR output must be assessed, for example with character and word error rates.
+2.4IMAGE PROCESSING AND OPENCV-BASED VISUAL CUES
+OpenCV. Objective: OpenCV is a widely used library of image-processing and computer-vision functions [3]. Technique: it provides operations such as smoothing, edge detection and filtering, which can be used to derive simple cues like blur level or edge density. Relevance: VisionIQ’s defect-detection agent uses such operations as inexpensive heuristic cues for candidate visual irregularities. Limitation: these cues are not learned from labelled defect data, are sensitive to lighting, texture and resolution, and are not equivalent to a validated industrial defect classifier. They can only flag candidates for human inspection.
+2.5DEEP LEARNING FOUNDATIONS AND BENCHMARKS
+ResNet, U-Net and COCO. Objective: these works address, respectively, training deeper networks, segmenting images and benchmarking object recognition. Technique: residual learning uses skip connections to ease the training of very deep networks [12]; U-Net uses an encoder–decoder with skip connections for image segmentation [13]; the COCO dataset provides large-scale annotated images of common objects in context and supports common evaluation practice for detection and scene understanding [14]. Relevance: they supply the background for modern perception models and for the detection metrics adopted in Chapter 7. Limitation: they concern individual perception capabilities and do not address how to select among several models for a particular natural-language question.
+2.6LANGUAGE-MODEL TOOL USE AND AGENT ORCHESTRATION
+ReAct. Objective: Yao et al. sought to combine reasoning and acting in language-model workflows [4]. Technique: the model interleaves reasoning traces with actions that query external sources, using the observations to continue reasoning. Relevance: it motivates the idea that an LLM can choose actions in a loop. Limitation: it does not model the cost or latency of the actions it selects and is not specific to vision.
+Toolformer. Objective: Schick et al. studied how a language model can learn to use external tools [5]. Technique: the model is fine-tuned on self-generated examples so that it learns which application programming interface (API) to call, when and with which arguments. Relevance: it supports the premise that tool selection can be learned or inferred from text. Limitation: the tools are simple text-oriented APIs, tool cost is not part of the decision, and the approach is not designed for heterogeneous image-analysis agents.
+MRKL systems. Objective: Karpas et al. proposed a modular neuro-symbolic architecture that combines language models with external knowledge sources and discrete reasoning [6]. Technique: a router dispatches each request to one of several expert modules. Relevance: the router-plus-experts structure parallels VisionIQ’s planner-plus-specialist-agents structure. Limitation: it is primarily an architectural proposal, and it does not define a cost–latency scoring function or a vision-specific evaluation.
+HuggingGPT. Objective: Shen et al. aimed to solve complicated AI tasks, including image tasks, by letting a language model coordinate expert models [15]. Technique: the LLM acts as a controller that plans sub-tasks, selects expert models from a model hub, executes them and summarises the results. Relevance: it is a close conceptual precedent for LLM-driven selection of vision experts. Limitation: planning with an LLM adds latency and depends on the controller’s reliability, and it does not use an explicit cost-aware scoring formulation with a deterministic fallback.
+2.7LANGGRAPH AND CONDITIONAL WORKFLOW EXECUTION
+LangGraph. Objective: LangGraph is a framework for building stateful, multi-step language-model applications as graphs [16]. Technique: nodes represent processing steps, edges represent transitions, conditional edges choose the next node from the current state, and a shared state object carries data between nodes. Relevance: VisionIQ uses it to represent intent classification, agent selection, agent execution and response synthesis, including conditional branches and recovery paths. Limitation: the framework executes whatever graph the developer defines; it does not decide by itself which agents are worth running, so the quality of routing depends on VisionIQ’s own planner. As with other software documentation, it is not a peer-reviewed source.
+2.8RETRIEVAL-AUGMENTED GENERATION
+RAG. Objective: Lewis et al. aimed to improve knowledge-intensive language tasks by giving generation access to external knowledge [17]. Technique: a generator is combined with a retriever that fetches relevant passages from an external collection, and the passages condition the generated text. Relevance: VisionIQ retrieves documentation or knowledge snippets to give contextual grounding to explanations and recommendations. Limitation: retrieval can return irrelevant or incomplete material, and retrieved text does not verify what is visible in an image.
+RAG survey. Objective: Gao et al. surveyed RAG for large language models [18]. Technique: the survey organises RAG into stages and architectures and discusses retrieval, generation, augmentation and evaluation. Relevance: it provides terminology and evaluation considerations for the RAG component. Limitation: it focuses on text-based systems, and grounding responses in visual evidence remains outside its main scope.
+2.9DYNAMIC AND COST-AWARE MODEL AND AGENT ROUTING
+FrugalGPT. Objective: Chen, Zaharia and Zou studied how to reduce the cost of querying LLM services while maintaining or improving quality [7]. Technique: strategies such as prompt adaptation, model approximation and LLM cascades select which model to call for a query. Relevance: it establishes cost-aware selection as a legitimate design objective, which VisionIQ adopts for vision agents. Limitation: it addresses LLM services rather than heterogeneous vision agents, and its learned selection requires training data that VisionIQ does not yet have.
+RouteLLM. Objective: Ong et al. addressed routing between stronger and weaker language models to reduce cost [8]. Technique: router models are trained on preference data to decide, per query, which model should answer. Relevance: it supports the idea of a per-query routing decision with an explicit quality–cost trade-off. Limitation: it concerns choosing between language models and not selecting complementary evidence sources for an image.
+2.10EVALUATION OF MULTI-AGENT AND VISION-LANGUAGE SYSTEMS
+AgentBench. Objective: Liu et al. proposed a benchmark for evaluating LLMs acting as agents [19]. Technique: models are tested in a range of interactive environments to measure their ability to act and decide over several steps. Relevance: it illustrates that agent behaviour needs to be assessed separately from the fluency of the final text, which is consistent with VisionIQ’s plan to evaluate routing quality and evidence support separately from answer wording. Limitation: it does not target image-grounded question answering or cost-aware routing. Detection benchmarks such as COCO [14] supply evaluation practice for the perception layer, but no single benchmark covers routing quality, evidence support and latency together; Chapter 7 therefore defines a project-specific protocol.
+2.11RESEARCH GAP
+The surveyed work shows that mature perception models exist, that language models can use tools, that graph-based frameworks can execute conditional workflows, that retrieval can supply context, and that cost-aware selection is a recognised idea for language models. Related systems that coordinate expert models also exist [15], so this report does not claim that no similar system exists.
+The remaining gap is practical and architectural. A fixed pipeline runs the same modules for requests with different needs; a detector-only design is insufficient for text-centred questions, and an OCR-only path cannot localise objects. Running every component increases computation unnecessarily. VisionIQ’s intended contribution is the integration, in one traceable application, of query-conditioned agent selection, cost-aware planning with an explicit scoring formulation, heterogeneous specialist vision agents, evidence aggregation with provenance, deterministic fallback routing, partial-failure handling and persistent execution traces. The contribution is not a claim that the underlying detection or OCR models are novel, and its benefit must be established through the evaluation protocol in Chapter 7.
+CHAPTER 3
+EXISTING SYSTEM
+CHAPTER 3
+EXISTING SYSTEM
+3.1OVERVIEW OF THE EXISTING SYSTEM
+The existing approach considered in this report is the conventional fixed vision pipeline. A request, consisting of an image and possibly a question, enters the application and is passed through a predetermined set of modules, typically object detection, text recognition, defect or quality analysis and scene description. The outputs of all modules are merged by fixed logic and returned as a single response. The user’s question does not influence which modules run; at most it influences the wording of the final answer.
+This design is common because it is easy to implement and test: the sequence of operations is known in advance, and the behaviour for a given image is predictable. It works acceptably when every request needs every module. In multi-purpose applications, however, requests differ widely, and the design becomes inefficient.
+3.2BLOCK DIAGRAM OF THE EXISTING SYSTEM
+Figure 3.1 shows the structure of a fixed pipeline. The input image and query pass through the interface into a block in which every component executes. Their outputs are combined by a fixed merge step, and a single response is generated.
+Figure 3.1 Block diagram of the Existing System (fixed pipeline)
+The key property illustrated by the figure is the absence of a decision point between the request and the execution of the components. Whatever the question, all four components are run.
+3.3DRAWBACKS OF THE EXISTING SYSTEM
+The following drawbacks are design limitations of the general fixed-pipeline approach. They are reasoned from the structure of the pipeline and are not results of a controlled experiment.
+Unnecessary execution of unrelated components. A question such as “What does the label say?” does not need object enumeration or scene description, yet a fixed pipeline runs them. The computation is spent without benefit to the answer.
+Potentially higher inference cost and latency. Because the total work equals the sum of all components, the cost and response time are determined by the full set of modules. Whether this difference is significant for a given deployment depends on the hardware, models and inputs, and must be measured.
+Poor alignment between user intent and executed models. The pipeline has no representation of what the user wants, so it cannot prefer the modules whose evidence is relevant. Irrelevant outputs may be presented alongside relevant ones.
+Difficulty tracing the evidence behind the answer. When all outputs are merged by fixed logic, it is hard to see which component supports which statement, and hard to diagnose why an answer was wrong.
+Challenges when one component fails. If the modules are tightly chained, an exception in one of them can abort the request even when the other modules produced useful evidence, instead of returning a partial, qualified answer.
+3.4NEED FOR AN ADAPTIVE SYSTEM
+These drawbacks motivate a system that decides, per request, which components are worth running; that records the evidence each component produces; and that continues with partial results when a component fails. The proposed VisionIQ system, described in Chapter 4, is designed around these requirements.
+CHAPTER 4
+PROPOSED SYSTEM
+CHAPTER 4
+PROPOSED SYSTEM
+4.1OVERVIEW OF THE PROPOSED SYSTEM
+VisionIQ is an adaptive, query-aware multi-agent vision intelligence framework. A user submits an image and a natural-language question through a web interface. The backend interprets the question, estimates which specialist agents are useful and affordable, executes only the selected agents through a conditional workflow, consolidates their outputs into evidence, optionally retrieves contextual knowledge, and produces a qualified answer with root-cause analysis and recommendations. Query history and execution traces are stored for later inspection.
+The design deliberately separates three concerns: deciding what is needed (intent classification and planning), producing evidence (specialist agents) and explaining the result (aggregation, retrieval grounding, RCA and recommendations). This separation allows each concern to be evaluated and improved independently.
+4.2ARCHITECTURE AND DATA FLOW
+Figure 4.1 presents the processing architecture. A request enters through the React and Vite interface and is validated by the FastAPI backend. Intent classification, which uses an LLM with a deterministic fallback, feeds the cost-aware agent planner. LangGraph then executes the selected agents conditionally. Their outputs are combined by evidence aggregation with provenance, optionally supplemented by RAG retrieval, and turned into a qualified answer, RCA and recommendations. SQLite with SQLAlchemy stores the history and traces.
+Figure 4.1 Architecture of the proposed VisionIQ system
+The dashed boxes in Figure 4.1 indicate optional or supporting elements: RAG retrieval is used only when contextual information is needed, and CPU/CUDA fallback and error handling operate across the execution layer. The dashed arrows to the persistence store show that history and trace metadata are written during and after execution.
+4.3NATURAL-LANGUAGE QUERY INTERPRETATION
+The frontend submits the visual input and the question to the backend. The backend validates the request and creates a shared execution state that holds the query, input references, intent labels, selected agents, agent outputs, error information and the final response. This state travels through the workflow so that each stage can read earlier results and add its own.
+Interpretation determines what the user is asking for in terms of visual capabilities. For example, counting requests relate to detection, reading requests relate to OCR, requests about unusual appearance relate to anomaly cues, and broad descriptive requests relate to scene understanding. Some requests relate to several capabilities at once. Ambiguous queries may still require clarification or a broader agent selection.
+4.4INTENT CLASSIFICATION AND DETERMINISTIC FALLBACK
+An LLM-based classifier estimates the intent of the request and produces labels that describe the required capabilities. Because a language model can be unavailable, slow or uncertain, the system includes a deterministic fallback. The fallback maps recognisable query patterns to a conservative agent set when classification fails or returns an unusable result. The term “conservative” means that, when the fallback is uncertain, it prefers to include an agent that might be needed rather than risk omitting required evidence. The design therefore guarantees that routing can proceed even without the language model, at the possible price of a broader selection.
+4.5DYNAMIC COST-AWARE AGENT PLANNER
+Given the estimated intent, the planner scores each available agent using the routing score defined in Section 5.3. Relevance and evidence capability raise the score of an agent, while normalised computational cost and expected latency lower it. Agents whose score reaches the configured threshold are selected. The selected set may then be expanded by mandatory dependencies and complementary-evidence rules; for example, a request to read a label attached to an object may require both object detection and OCR. The planner thereby converts a single natural-language request into an explicit, inspectable execution plan.
+4.6SPECIALIST AGENT EXECUTION
+The selected agents are executed through LangGraph conditional branches. Table 4.1 summarises the agents and their responsibilities. Each agent returns its output in the shared state, and any failure is recorded as error information rather than terminating the whole request.
+Agent / component
+Responsibility
+Evidence produced
+Object Detection Agent (YOLOv11)
+Identifies and localises objects in the image.
+Class labels, confidence values, bounding-box coordinates
+OCR Agent (EasyOCR)
+Extracts visible text from labels, documents, signs and similar inputs.
+Recognised text strings with confidence values where available
+Defect Detection Agent (OpenCV)
+Applies heuristic cues such as blur and edge analysis to flag candidate irregularities.
+Candidate visual-irregularity cues (not validated defect diagnoses)
+Scene Understanding Agent
+Provides contextual interpretation for questions that need more than individual detections.
+Scene-level description
+RAG component
+Retrieves relevant documentation or knowledge snippets.
+Contextual passages for grounding
+RCA and recommendation components
+Combine available evidence to propose possible explanations and next steps.
+Qualified explanations and suggested actions
+Table 4.1 Specialist agents and components of VisionIQ
+4.7EVIDENCE AGGREGATION AND PROVENANCE
+After execution, the outputs of the successful agents are consolidated into an evidence set. Each item keeps a reference to the agent that produced it. This provenance allows the final answer to state which evidence supports each claim, and it allows a reviewer to detect when a statement has no supporting evidence. If an agent has failed or was not selected, the absence is recorded so that the answer does not imply that the capability was exercised.
+4.8RETRIEVAL-AUGMENTED CONTEXTUAL GROUNDING
+When a request needs background knowledge, the system retrieves relevant documentation or knowledge snippets and supplies them to the response generator, following the retrieval-augmented generation approach [17]. Retrieval provides context only. It does not independently prove that an observation about the image is correct; the visual claims still depend on the evidence produced by the vision agents.
+4.9ROOT-CAUSE ANALYSIS AND RECOMMENDATION GENERATION
+The RCA and recommendation components combine the aggregated evidence, and retrieved context where available, to propose possible explanations and suggested next steps. Causal statements must remain qualified. When the evidence is insufficient, the answer should say so, avoid asserting a root cause, and recommend human inspection, especially for safety-critical decisions.
+4.10PERSISTENCE OF QUERY HISTORY AND EXECUTION TRACES
+SQLite, accessed through SQLAlchemy, stores query history, execution traces and artefact metadata. A trace records which agents were selected, which executed, what they returned and which errors occurred. Traces make it possible to diagnose incorrect routing, failed model execution and unsupported recommendations. Complete reproducibility additionally requires recording model versions, configuration, hardware and test inputs, and stored images and traces should be protected by access control and retention policies.
+4.11CPU/CUDA FALLBACK AND AGENT-LEVEL ERROR HANDLING
+Models run on a CUDA-capable graphics processor when available and fall back to the CPU otherwise, subject to model and dependency compatibility. Error handling is applied at the level of individual agents so that a failure in one branch does not discard the successful results of the others. The response generator can then produce a partial response that states which evidence is missing.
+4.12EXPECTED BENEFITS AND DESIGN LIMITATIONS
+The expected benefits are reduced unnecessary computation, answers aligned with the user’s intent, better traceability of evidence, graceful degradation when an agent fails, and an inspectable record of each execution. These are design objectives; they must be confirmed by the evaluation in Chapter 7.
+The design has limitations. Relevance, evidence, cost and latency estimates require calibration against representative queries. Errors in detection or OCR may propagate into downstream reasoning. Retrieval may return irrelevant material, and generated explanations may overstate the evidence. Latency depends on hardware, warm-up, resolution, concurrency and software versions. The OpenCV cues are heuristic. These limitations are revisited in Chapter 7.
+CHAPTER 5
+ALGORITHMS AND METHODOLOGY
+CHAPTER 5
+ALGORITHMS AND METHODOLOGY
+5.1OVERVIEW OF THE METHODOLOGY
+This chapter describes the algorithms and techniques of VisionIQ, from query interpretation to persistence. Each technique is first explained in plain language and then in technical detail. Third-party models such as YOLOv11 and EasyOCR are used as components; they were not developed by the project team.
+5.2QUERY-AWARE INTENT CLASSIFICATION
+Intent classification answers the question “Which visual capabilities does this query need?”. The LLM-based classifier receives the natural-language query and produces intent labels, for example object-related, text-related, anomaly-related, scene-related or contextual. These labels feed the relevance estimates R(a, q) used by the planner.
+The deterministic fallback is a rule-based alternative. It inspects the query for recognisable patterns and maps them to a conservative agent set. It is used when the LLM classifier fails or returns an unusable result. The two mechanisms differ in flexibility and reliability: the LLM can interpret unusual phrasing but may be unavailable or uncertain, whereas the rules are predictable and fast but limited to patterns they were written for.
+5.3COST-AWARE ROUTING SCORE
+Let q denote a user query and A = {a1, a2, …, aM} the set of available agents. For each agent a the planner estimates the four quantities defined in Table 5.1.
+Symbol
+Meaning
+Effect on score
+R(a, q)
+Relevance of agent a to query q
+Increases
+E(a)
+Expected evidence capability of agent a
+Increases
+C(a)
+Normalised computational cost of agent a
+Decreases
+L(a)
+Normalised expected latency of agent a
+Decreases
+α = 0.50
+Weight of relevance
+—
+β = 0.20
+Weight of computational cost
+—
+γ = 0.15
+Weight of latency
+—
+δ = 0.15
+Weight of evidence capability
+—
+τ = 0.50
+Configured selection threshold
+—
+Table 5.1 Symbols used in the routing formulation
+The routing score of agent a for query q is
+S(a, q) = αR(a, q) + δE(a) − βC(a) − γL(a)(5.1)
+with the configured weights
+α = 0.50,   β = 0.20,   γ = 0.15,   δ = 0.15(5.2)
+An agent is eligible for execution when its score reaches the threshold τ = 0.50:
+Aq = { a ∈ A : S(a, q) ≥ τ }(5.3)
+Relevance and evidence capability increase the score, while estimated cost and latency reduce it. The weights show the priorities of the design: relevance matters most (0.50), cost is penalised more than latency (0.20 against 0.15), and evidence capability has the same weight as latency (0.15). The weights and the threshold are engineering parameters. They are not universally optimal values and have not been learned from data; they require empirical calibration against representative queries.
+The selected set Aq may be expanded. When a query needs complementary evidence, for example reading a label attached to an object, both object detection and OCR may be required. Mandatory dependencies and fallback rules take precedence over an overly restrictive threshold.
+Properties of the heuristic. Equation (5.1) implies a maximum possible score of 0.65, reached when R = E = 1 and C = L = 0. With E = 1 and no cost or latency, an agent needs R ≥ 0.70 to reach τ = 0.50. The threshold is therefore demanding, and only highly relevant agents can pass it; this is one reason why dependency rules and fallback rules are needed. The score is also additive, so it does not capture interactions between agents. Table 5.2 gives a numerical illustration using hypothetical values chosen only to show the arithmetic; they are not measured values.
+Case
+R
+E
+C
+L
+S(a, q)
+S ≥ τ ?
+Outcome
+Agent X
+0.95
+0.80
+0.30
+0.20
+0.505
+Yes
+Selected
+Agent Y
+0.10
+0.90
+0.60
+0.70
+−0.040
+No
+Not selected
+Table 5.2 Hypothetical numerical illustration of Equation (5.1) (not measured values)
+For Agent X: 0.50(0.95) + 0.15(0.80) − 0.20(0.30) − 0.15(0.20) = 0.475 + 0.120 − 0.060 − 0.030 = 0.505. For Agent Y: 0.050 + 0.135 − 0.120 − 0.105 = −0.040.
+Planning objective. The selection problem can also be written as a budgeted optimisation. With a binary variable za ∈ {0, 1} indicating whether agent a is selected and an execution budget B,
+max z ∑a∈A za [ αR(a, q) + δE(a) ](5.4)
+subject to
+∑a∈A za [ βC(a) + γL(a) ] ≤ B,   za ∈ {0, 1}(5.5)
+This formulation describes the intended planning objective. An empirical improvement over a fixed-pipeline baseline has to be demonstrated by experiment.
+5.4LANGGRAPH CONDITIONAL ORCHESTRATION
+Graph-based orchestration treats the workflow as nodes connected by edges, with a shared state that every node can read and update [16]. In VisionIQ, nodes correspond to intent classification, agent planning, individual agents, aggregation, optional retrieval, response synthesis and persistence. Conditional edges choose, from the planner’s output stored in the state, which agent nodes to run. Figure 5.2 shows this structure.
+Figure 5.2 LangGraph conditional execution with shared state
+After the selected agents finish, the aggregation node collects the successful results. A failed agent writes error information to the state instead of stopping the graph, so the aggregation node proceeds with the remaining evidence. This is the mechanism for partial recovery: a response can still be produced when one branch fails, and the response states which evidence is missing.
+5.5YOLOV11 OBJECT DETECTION
+Object detection answers “what is in the image and where?”. A detector processes the image and returns, for each detected object, a class label, a confidence score between 0 and 1 and a bounding box giving the object’s location. Detections with low confidence can be filtered by a threshold. YOLO-style detectors perform this in a single forward pass of the network [1], and YOLO11 is the Ultralytics model family used here [10]. YOLOv11 is a third-party model: the project integrates it as a specialist agent and does not claim to have developed it. The agent can only recognise categories included in its trained weights.
+5.6EASYOCR TEXT EXTRACTION
+OCR converts text visible in an image into machine-readable strings. EasyOCR locates text regions and recognises their content [2], returning text with positional information and confidence values where available. OCR quality varies with resolution, lighting, orientation, font and language configuration, so the output must be assessed rather than assumed correct. The planned evaluation uses character error rate (CER) and word error rate (WER) for this purpose.
+5.7OPENCV HEURISTIC ANOMALY ANALYSIS
+The anomaly agent uses classical image-processing operations from OpenCV [3]. Two typical cues are blur and edge structure. Gaussian blur smooths an image and suppresses noise; Canny edge detection finds strong intensity changes. Measuring how sharp or how dense the edges are, or comparing the image before and after smoothing, gives simple indications of blur or of irregular texture. Such cues are inexpensive to compute, which suits the cost-aware design.
+These cues are preliminary visual heuristics. They are not equivalent to a validated industrial defect-classification model, they do not know which patterns are defects in a given domain, and they are sensitive to lighting and texture. Their output should be reported as candidate irregularities that need human inspection. The exact operations and parameters used in the implementation are to be verified against the codebase.
+5.8RETRIEVAL-AUGMENTED GENERATION
+RAG retrieves passages relevant to the query or to the evidence from a document collection and supplies them to the language model that writes the response [17], [18]. In VisionIQ it grounds explanations and recommendations in documentation or knowledge snippets. Retrieval has its own failure modes: the retrieved material can be irrelevant or incomplete, and retrieval does not prove that a visual observation is correct. The response should therefore treat retrieved text as context and visual evidence as the basis for visual claims.
+5.9EVIDENCE AGGREGATION, RCA AND RECOMMENDATIONS
+Aggregation merges the outputs of the successful agents into one evidence record while keeping the identity of the producing agent for each item. The RCA component reasons over this record to propose possible explanations, and the recommendation component suggests next steps. The wording of the answer should reflect the strength of the evidence: where the evidence is insufficient, causal claims are qualified or withheld, and human inspection is recommended. A fluent answer does not prove that its claims are supported by the image; the evidence-support measure in Chapter 7 is intended to check this.
+5.10ERROR HANDLING AND PERSISTENCE
+Three mechanisms support robustness. First, execution falls back from CUDA to CPU when the preferred device is unavailable, subject to compatibility. Second, agent-level error handling catches a failure inside one agent and records it in the shared state without aborting the others. Third, SQLite with SQLAlchemy records query history and execution-trace metadata [20], [21], so that failures and routing decisions can be examined afterwards.
+5.11COMPLETE ORCHESTRATION ALGORITHM
+Algorithm 5.1 gives the pseudocode of the complete orchestration, and Figure 5.1 shows the routing portion as a workflow.
+Algorithm 5.1  Query-Aware VisionIQ Orchestration
+1:Require: visual input I, query q, agents A, threshold τ
+2:Ensure: response y and trace T
+3:Validate input and initialise shared state
+4:Infer query intent using the LLM classifier
+5:if intent inference fails then
+6:  Apply deterministic fallback rules
+7:end if
+8:for each agent a ∈ A do
+9:  Estimate R(a, q), E(a), C(a) and L(a)
+10:  Compute S(a, q) using Equation (5.1)
+11:end for
+12:Select eligible agents Aq using Equation (5.3)
+13:Apply mandatory agent dependencies and complementary evidence
+14:Execute selected graph branches
+15:Record outputs and failures in trace T
+16:Aggregate successful outputs with source attribution
+17:Retrieve relevant context when required
+18:Generate a qualified answer and recommendations
+19:Persist history, trace and artefact references
+20:return y, T
+Figure 5.1 Query-to-agent routing workflow
+Figure 5.1 shows that the flow has two decision points: whether the LLM intent is usable, and whether each agent’s score reaches the threshold. Skipped agents are recorded in the trace, so the absence of an agent’s output can be distinguished from a failure.
+5.12ILLUSTRATIVE EXAMPLE OF QUERY-SPECIFIC AGENT SELECTION
+Table 5.3 shows how different queries may activate different agents. The examples are illustrative design examples; they are not experimental results, and the actual selection depends on the calibrated scores and rules.
+Example query
+Detect
+OCR
+Anomaly
+Scene
+RAG
+RCA / recs
+“How many boxes are on the shelf?”
+●
+—
+—
+—
+—
+—
+“What does the label say?”
+—
+●
+—
+—
+—
+—
+“What is written on the label attached to the bottle?”
+●
+●
+—
+—
+—
+—
+“Is there any visible irregularity on this part?”
+●
+—
+●
+—
+○
+●
+“Describe this scene.”
+○
+—
+—
+●
+—
+—
+“What could have caused this damage and what should be done?”
+●
+○
+●
+●
+●
+●
+Table 5.3 Illustrative query-specific agent selection (design example, not experimental results)
+● = expected to be selected; ○ = may be added by dependency or complementary-evidence rules; — = not selected. In the third example the label request needs both object detection and OCR, which illustrates a complementary-evidence expansion.
+CHAPTER 6
+IMPLEMENTATION AND SETUP
+CHAPTER 6
+IMPLEMENTATION AND SETUP
+6.1IMPLEMENTATION OVERVIEW AND STATUS
+VisionIQ is implemented as a web-based application consisting of a frontend interface, a backend API, an orchestration layer, specialised vision agents, and a persistence layer. The application accepts visual inputs and natural-language queries, identifies the required visual capabilities, selects relevant agents, and coordinates their execution to generate responses based on the available visual evidence.
+The frontend is developed using React 18 and Vite, while the backend uses FastAPI to handle requests and coordinate processing. LangGraph manages conditional workflow execution. The vision components integrate YOLOv11 for object detection, EasyOCR for text extraction, and OpenCV for preliminary visual anomaly analysis. Additional components support scene understanding, retrieval-augmented grounding, root-cause analysis, and recommendation generation where implemented. SQLite with SQLAlchemy provides persistent storage for query history and execution traces.
+The orchestration layer supports query interpretation, agent selection, evidence aggregation, and fallback handling. The routing strategy is designed to balance query relevance and evidence capability against computational cost and execution latency. The following table summarises the major system components, their responsibilities, and the implementation details documented for the completed application.
+6.2DEVELOPMENT ENVIRONMENT AND DEPENDENCIES
+VisionIQ uses a modular technology stack that integrates a web-based user interface, backend API services, conditional workflow orchestration, specialised computer vision components, and persistent data storage. The frontend is developed using React 18 and Vite [22], [23], while FastAPI provides the backend API layer [24]. LangGraph supports conditional workflow execution and coordination between the selected vision agents [16]. YOLOv11 is used for object detection [10], EasyOCR for text extraction [2], and OpenCV for image-processing operations [3]. SQLite and SQLAlchemy provide persistent storage for query history and execution-trace information [21], [20].
+Table 6.2 summarises the technologies used in VisionIQ and their respective responsibilities. The exact Python version, Node.js version, and package versions should be documented from the development environment to support reproducibility.
+Table 6.2: Technology stack and module responsibilities of VisionIQ.
+Layer
+Technology
+Responsibility
+Frontend
+React 18, Vite
+User interface, query submission, result presentation
+Backend API
+FastAPI
+Request validation, API endpoints, response delivery
+Orchestration
+LangGraph
+Conditional workflow, shared state, branch coordination
+Intent routing
+LLM + deterministic fallback
+Intent classification and fallback routing
+Object detection
+YOLOv11
+Object detection and localisation
+OCR
+EasyOCR
+Visible text extraction
+Image processing
+OpenCV
+Heuristic anomaly and defect cues
+Contextual grounding
+RAG
+Retrieval of relevant contextual knowledge
+Reasoning
+RCA and recommendations
+Evidence-based explanation and suggested next steps
+Persistence
+SQLite + SQLAlchemy
+Query history, execution traces, artefact metadata
+Runtime
+CPU/CUDA fallback
+Alternative inference execution and error handling
+Table 6.2 Technology stack and module responsibilities
+6.3REQUEST AND RESPONSE FLOW
+The VisionIQ request-processing workflow begins when a user uploads an image and enters a natural-language query through the web interface. The frontend sends the input to the FastAPI backend, which validates the request and initialises the execution state. The LangGraph orchestration workflow then interprets the query, determines the required visual capabilities, calculates agent-selection scores, and conditionally executes the selected vision agents.
+The outputs from the executed agents are aggregated into a common evidence representation. When required, the system retrieves relevant contextual information to support the generation of an explanation. Based on the available evidence, the response-generation component produces a relevant answer and, where supported, root-cause analysis and recommendations. The backend stores the query history and execution trace in the database and returns the generated response and available visual evidence to the frontend for presentation.
+6.4BACKEND AND FRONTEND INTEGRATION
+VisionIQ separates the frontend interface from the backend processing and orchestration logic. The frontend, developed using React and Vite, provides the interface for image submission, natural-language query input, and result presentation. The FastAPI backend handles incoming requests, validates input data, invokes the orchestration workflow, and returns the processing results to the frontend.
+This separation improves modularity by allowing the user interface and backend processing components to be developed and maintained independently. The backend coordinates communication between the query-processing module, specialised vision agents, evidence aggregation components, and persistence layer. The API request and response structures define how inputs, execution status, detected information, and generated responses are exchanged between the frontend and backend.
+The API routes, request fields, response schemas, and validation rules should be documented using the actual endpoint definitions in the project source code.
+6.5MODEL INTEGRATION
+VisionIQ integrates specialised vision models and image-processing components through a modular agent architecture. Each agent performs a specific visual analysis task and returns its output to the orchestration workflow. This modular design allows the planner and evidence aggregation component to coordinate heterogeneous agents through a common execution state.
+The YOLOv11-based object detection agent identifies and localises supported object categories in the input image. The EasyOCR agent extracts visible text from labels, documents, signs, and other text-containing regions. The OpenCV-based anomaly analysis component applies image-processing operations to identify preliminary visual irregularities. The scene-understanding component provides contextual interpretation when required by the query.
+The outputs of the selected agents are collected for subsequent evidence aggregation and response generation. Model checkpoints, configuration parameters, OCR language settings, confidence thresholds, and image-processing parameters should be documented according to the actual implementation to support reproducibility. The OpenCV-based anomaly analysis is heuristic in nature and should not be interpreted as a validated industrial defect classifier.
+6.6QUERY ROUTING AND CONDITIONAL EXECUTION
+Routing is implemented as described in Chapter 5: intent classification with fallback, score computation, threshold selection, dependency expansion and conditional execution of the selected branches. The estimates of relevance, evidence capability, cost and latency are inputs to the planner. The source does not state how these values are obtained, for example from fixed tables or from measurements, so this is listed as an item to verify.
+6.7ERROR HANDLING
+Errors are handled at several levels. Request validation rejects malformed input before orchestration. Intent-classification failures trigger the deterministic fallback. Agent failures are caught inside the agent branch and recorded in the shared state. Device unavailability triggers CPU execution in place of CUDA. The aggregation stage works with whatever evidence exists and the answer indicates what is missing.
+6.8DATA STORAGE AND TRACE METADATA
+Query history, execution traces and artefact metadata are stored in SQLite through SQLAlchemy. Conceptually, a trace records the query, the intent labels, the selected and skipped agents, each agent’s output or error, and references to stored artefacts such as annotated images. The database schema is not provided in the source and is not invented here. For reproducible experiments, execution records should also include package versions, model identifiers, hardware, inference settings, timestamps and benchmark input identifiers. Uploaded images and traces should follow privacy and access-control policies.
+6.9SETUP PROCEDURE (CONCEPTUAL)
+At the level supported by the source material, setting up the system involves the following steps:
+Prepare a Python environment for the backend and a Node.js environment for the frontend.
+Install the backend dependencies: FastAPI, LangGraph, the YOLO11 package, EasyOCR, OpenCV, SQLAlchemy and the libraries required for the language-model client.
+Install the frontend dependencies for React 18 and Vite.
+Provide credentials or endpoints for the language model used in intent classification, and prepare the document store used for retrieval.
+Ensure that the model weights are available and, if a GPU is used, that a CUDA-compatible driver and framework build are installed.
+Start the backend service and the frontend development server, then submit a test image and query.
+The exact commands, configuration files and environment variables belong to the project repository and are to be documented from it.
+6.10IMPLEMENTATION VERIFICATION AND REPRODUCIBILITY
+The VisionIQ implementation should be documented in a manner that supports verification, reproducibility, and future maintenance. The development environment includes the software versions, dependencies, model configurations, and runtime settings required to execute the application. The source-code organisation and API routes describe the interaction between the frontend, backend, and orchestration components, while the database schema specifies how query history and execution traces are stored.
+The query-routing implementation uses relevance, evidence capability, computational cost, and estimated execution latency to determine the selection of specialised vision agents. The corresponding parameter values, selection threshold, and dependency rules should be documented consistently with the implemented routing algorithm. The report should also identify the language model used for intent classification, the deterministic fallback mechanism, the retrieval corpus and embedding configuration where applicable, and the image-processing operations used for preliminary anomaly analysis.
+Functional verification should cover image submission, query interpretation, agent selection, conditional execution, evidence aggregation, response generation, database persistence, and error handling. Genuine screenshots of the running application and representative outputs can be included to demonstrate the implemented functionality. Relevant configuration details, test inputs, execution traces, and observed results should be recorded where available.
+The implementation should be evaluated based on verified functionality and documented test outcomes. Claims about detection accuracy, routing quality, response latency, computational savings, or reliability improvements should be supported by actual measurements rather than assumptions. Any feature that has not been implemented or tested should be identified as a limitation or future enhancement.
+CHAPTER 7
+RESULTS AND DISCUSSION
+CHAPTER 7
+RESULTS AND DISCUSSION
+7.1EVALUATION OBJECTIVES
+The source paper states that benchmark logs and repeatable test outputs have not been supplied. This chapter is therefore a statement of the evaluation design and not a report of measured outcomes. No accuracy, precision, recall, F1-score, mAP, routing accuracy, latency, memory use or performance improvement is claimed. The evaluation is intended to:
+assess the quality of individual agents (detection and OCR) separately from the quality of routing;
+determine whether query-aware and cost-aware routing reduces work and latency compared with a fixed pipeline;
+determine whether any efficiency gain is obtained without loss of answer correctness and evidence support;
+measure the reliability of the system under agent failures;
+quantify the contribution of each design component through ablation.
+The evaluation must keep these questions separate because correct detection does not demonstrate correct routing, and a fluent answer does not prove that its claims are supported by the image.
+7.2PROPOSED EXPERIMENTAL DESIGN
+Three configurations are compared on identical inputs (Table 7.1, Figure 7.1).
+Config.
+Name
+Description
+A
+Fixed-pipeline baseline
+Executes all available agents for every query.
+B
+Query-aware routing without cost penalties
+Selects agents by relevance and evidence capability only (β = γ = 0).
+C
+Full VisionIQ planner
+Cost-aware routing with Equation (5.1), threshold, dependency rules and fallback.
+Table 7.1 Configurations compared in the evaluation
+Figure 7.1 Evaluation methodology
+A fair comparison requires identical test inputs and comparable hardware, model versions, input resolution, concurrency settings and answer-generation configuration. Models should be warmed up before timing, and latency should be reported as median and 95th-percentile values over repeated runs.
+7.3DATASET AND PROCEDURE
+A held-out set of image–query pairs should be constructed to cover object detection and counting, text extraction, scene description, anomaly-cue inspection, contextual questions and multi-agent queries. Each item should include a reference intent label, the expected set of relevant agents, ground-truth object or text annotations where applicable, and a documented rubric for answer correctness and evidence support. The data should be split by source image or capture session to avoid leakage of near-duplicate images between development and test sets. The report of results should state the dataset size, the query categories, the annotation procedure, exclusions and inter-annotator agreement.
+7.4EVALUATION METRICS
+Table 7.2 defines the metrics. Detection quality is measured by precision, recall and mean average precision (mAP) at explicitly defined intersection-over-union (IoU) thresholds. OCR quality is measured by character error rate (CER) and word error rate (WER). Routing is measured by agent-set precision, recall and F1-score against annotated required-agent sets.
+Metric
+Definition
+Applies to
+Detection precision / recall
+TP/(TP+FP) and TP/(TP+FN) at a stated IoU threshold
+YOLOv11 agent
+mAP
+Mean over classes of average precision at a stated IoU threshold
+YOLOv11 agent
+CER
+(substitutions + deletions + insertions) / reference characters
+OCR agent
+WER
+The same edit-distance ratio computed over words
+OCR agent
+Routing precision
+|selected ∩ required| / |selected|
+Planner
+Routing recall
+|selected ∩ required| / |required|
+Planner
+Routing F1
+2 × precision × recall / (precision + recall)
+Planner
+Answer correctness
+Rubric-based score, with blinded human review where possible
+End-to-end
+Evidence support
+Rubric-based score of whether claims are supported by the image and evidence
+End-to-end
+Median and p95 latency
+50th and 95th percentile of end-to-end time
+Efficiency
+Mean agents per query
+Average number of agents invoked
+Efficiency
+Completion / fallback / degradation rates
+Fractions of runs completed, using fallback, and returning a partial answer under injected failures
+Reliability
+Table 7.2 Evaluation metrics and definitions
+7.5LATENCY REDUCTION
+For a fixed-pipeline latency Tfixed and a dynamic-planner latency Tdynamic, the latency reduction is calculated as
+Latency Reduction (%) = ( ( Tfixed − Tdynamic ) / Tfixed ) × 100(7.1)
+Both measurements must use the same paired query set and comparable conditions. The formula is not populated with values in this report because no measurements are available. Efficiency must be reported together with task-quality measurements, since invoking fewer agents may also omit necessary evidence.
+7.6RESULTS TABLE
+Table 7.3 is the structure in which the results will be recorded. All entries are intentionally blank. The table must be populated only from actual, documented runs.
+Metric
+A: Fixed
+B: Query-aware
+C: Full VisionIQ
+Test image–query pairs
+[pending]
+[pending]
+[pending]
+Detection precision / recall / mAP
+[pending]
+[pending]
+[pending]
+OCR CER / WER
+[pending]
+[pending]
+[pending]
+Routing precision / recall / F1
+n/a
+[pending]
+[pending]
+Answer correctness
+[pending]
+[pending]
+[pending]
+Evidence-support score
+[pending]
+[pending]
+[pending]
+Median / p95 latency (ms)
+[pending]
+[pending]
+[pending]
+Mean agents invoked per query
+[pending]
+[pending]
+[pending]
+Completion / fallback / degradation rate
+[pending]
+[pending]
+[pending]
+Table 7.3 Evaluation results — to be populated after experimental evaluation
+7.7ABLATION STUDY
+The contribution of each design component is evaluated by removing it from the full planner and comparing the results. Table 7.4 lists the planned variants. As with Table 7.3, the results are to be populated only after the experiments have been conducted.
+Variant
+Routing F1
+Answer correct.
+Evidence support
+Median / p95
+Mean agents
+Full VisionIQ
+[pending]
+[pending]
+[pending]
+[pending]
+[pending]
+Without cost and latency penalties
+[pending]
+[pending]
+[pending]
+[pending]
+[pending]
+Without deterministic fallback
+[pending]
+[pending]
+[pending]
+[pending]
+[pending]
+Without evidence aggregation
+[pending]
+[pending]
+[pending]
+[pending]
+[pending]
+Without retrieval grounding
+[pending]
+[pending]
+[pending]
+[pending]
+[pending]
+Table 7.4 Planned ablation variants — results to be populated after experimental evaluation
+7.8DISCUSSION: WHAT EACH METRIC WOULD ESTABLISH
+Detection precision, recall and mAP would establish how well the detector performs on the chosen images, and CER and WER how well OCR reads text; neither says anything about routing. Routing precision and recall would show whether the planner selects the needed agents (recall) without selecting unneeded ones (precision); high recall with low precision would resemble the fixed pipeline, whereas high precision with low recall would suggest that the threshold is too strict. Answer correctness and evidence support would show whether the selected evidence is sufficient for a correct, supported answer. Latency, agents per query and resource use would show the efficiency gain, which is meaningful only if quality is maintained. Completion, fallback and degradation rates would show whether the fault-isolation design behaves as intended.
+A positive conclusion about VisionIQ would require Configuration C to reduce latency and agent invocations relative to Configuration A without a material loss in answer correctness and evidence support, and the ablation to show which components are responsible. Until these experiments are completed, the benefits remain design objectives.
+7.9LIMITATIONS AND THREATS TO VALIDITY
+The relevance, evidence, cost and latency estimates require calibration; the weights and threshold are not universally optimal.
+OpenCV-based anomaly cues are heuristic and should not be presented as validated defect diagnoses without domain-specific labelled data.
+Errors in detection or OCR may propagate into downstream reasoning.
+Retrieval may return irrelevant or incomplete material, and generated explanations may overstate the evidence.
+Latency depends on hardware, model warm-up, image resolution, concurrency and software versions; results may not generalise beyond the stated environment.
+A small or unrepresentative test set, annotation bias and leakage between development and test data would weaken conclusions.
+Subjective rubric scoring requires documented criteria and, where possible, blinded review.
+7.10CURRENT STATUS
+At the time of this Phase-I report, the system design, routing formulation, orchestration algorithm and evaluation protocol are documented; the measured evaluation is planned for the next phase.
+CHAPTER 8
+CONCLUSION AND FUTURE ENHANCEMENT
+CHAPTER 8
+CONCLUSION AND FUTURE ENHANCEMENT
+8.1CONCLUSION
+This report addressed the inefficiency and opacity of fixed computer-vision pipelines, which run the same modules regardless of the user’s question. It presented VisionIQ, an adaptive multi-agent vision intelligence framework that interprets a natural-language query, estimates which specialist agents are needed, and executes only a selected subset through a LangGraph conditional workflow.
+The role of query-aware, cost-aware agent selection is to align the executed work with the user’s intent while balancing relevance and evidence capability against computational cost and latency, as formulated in Equation (5.1). The heterogeneous agents (YOLOv11 detection, EasyOCR text extraction, OpenCV heuristic cues and scene understanding), together with evidence aggregation, retrieval-grounded context, RCA and recommendations, produce answers whose supporting evidence can be traced. Persistent traces, CPU/CUDA fallback and agent-level error handling support debugging and partial recovery.
+The expected practical benefits are lower unnecessary computation, better traceability and graceful degradation. These are design expectations. The routing weights are engineering parameters, the OpenCV cues are heuristics, and errors may propagate between components. The report does not claim any measured accuracy or latency improvement; empirical validation with the protocol of Chapter 7 is still required.
+8.2FUTURE ENHANCEMENT
+The following work is planned and has not yet been completed:
+Calibrating the routing weights and the selection threshold on representative image–query data.
+Improving agent-cost estimation, for example from measured runtime profiles.
+Evaluating domain-specific anomaly detection with labelled data in place of generic heuristics.
+Improving evidence provenance so that every claim in the answer links to its source evidence.
+Testing on held-out image–query datasets and reporting the metrics in Table 7.3.
+Extending the framework to video streams and to additional specialist agents.
+Measuring reliability and performance under controlled conditions, including injected agent failures.
+REFERENCES
+[1]J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, “You only look once: Unified, real-time object detection,” in Proc. IEEE Conf. Computer Vision and Pattern Recognition, 2016, pp. 779–788.
+[2]JaidedAI, “EasyOCR: Ready-to-use OCR with 80+ supported languages,” software repository. [Online]. Available: https://github.com/JaidedAI/EasyOCR
+[3]OpenCV, “OpenCV documentation,” software documentation. [Online]. Available: https://docs.opencv.org/
+[4]S. Yao et al., “ReAct: Synergizing reasoning and acting in language models,” in Proc. International Conference on Learning Representations, 2023.
+[5]T. Schick et al., “Toolformer: Language models can teach themselves to use tools,” in Advances in Neural Information Processing Systems, vol. 36, 2023.
+[6]E. Karpas et al., “MRKL systems: A modular, neuro-symbolic architecture that combines large language models, external knowledge sources and discrete reasoning,” arXiv:2205.00445, 2022.
+[7]L. Chen, M. Zaharia, and J. Zou, “FrugalGPT: How to use large language models while reducing cost and improving performance,” arXiv:2305.05176, 2023.
+[8]I. Ong et al., “RouteLLM: Learning to route LLMs with preference data,” arXiv:2406.18665, 2024.
+[9]N. Carion et al., “End-to-end object detection with transformers,” in Proc. European Conference on Computer Vision, 2020, pp. 213–229.
+[10]Ultralytics, “YOLO11 documentation,” software documentation. [Online]. Available: https://docs.ultralytics.com/models/yolo11/
+[11]B. Shi, X. Bai, and C. Yao, “An end-to-end trainable neural network for image-based sequence recognition and its application to scene text recognition,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 39, no. 11, pp. 2298–2304, 2017.
+[12]K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in Proc. IEEE Conf. Computer Vision and Pattern Recognition, 2016, pp. 770–778.
+[13]O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional networks for biomedical image segmentation,” in Proc. Medical Image Computing and Computer-Assisted Intervention, 2015, pp. 234–241.
+[14]T.-Y. Lin et al., “Microsoft COCO: Common objects in context,” in Proc. European Conference on Computer Vision, 2014, pp. 740–755.
+[15]Y. Shen et al., “HuggingGPT: Solving AI tasks with ChatGPT and its friends in Hugging Face,” in Advances in Neural Information Processing Systems, vol. 36, 2023.
+[16]LangChain, “LangGraph documentation,” software documentation. [Online]. Available: https://langchain-ai.github.io/langgraph/
+[17]P. Lewis et al., “Retrieval-augmented generation for knowledge-intensive NLP tasks,” in Advances in Neural Information Processing Systems, vol. 33, 2020, pp. 9459–9474.
+[18]Y. Gao et al., “Retrieval-augmented generation for large language models: A survey,” arXiv:2312.10997, 2023.
+[19]X. Liu et al., “AgentBench: Evaluating LLMs as agents,” in Proc. International Conference on Learning Representations, 2024.
+[20]SQLAlchemy authors, “SQLAlchemy documentation,” software documentation. [Online]. Available: https://docs.sqlalchemy.org/
+[21]SQLite Consortium, “SQLite documentation,” software documentation. [Online]. Available: https://www.sqlite.org/docs.html
+[22]Meta Open Source, “React documentation.” [Online]. Available: https://react.dev/
+[23]Vite contributors, “Vite documentation.” [Online]. Available: https://vite.dev/
+[24]S. Ramírez, “FastAPI documentation,” software documentation. [Online]. Available: https://fastapi.tiangolo.com/
+Note: Software documentation entries are cited as documentation and are not peer-reviewed publications.
+APPENDIX A
+SOURCE CODE
+APPENDIX A
+SOURCE CODE
+Detection-validation.pyimport logging
+from typing import List, Dict, Any, Optional
+from pydantic import BaseModel, Field
+from app.agents.base import AgentExecutionResult
+from app.vision.model_registry import model_registry, INDUSTRIAL_CLASSES
+from app.core.config import settings
+logger = logging.getLogger("visioniq.detection_validator")
+class ValidatedDetection(BaseModel):
+    class_name: str
+    confidence: float
+    confidence_tier: str = Field("HIGH", description="HIGH, MEDIUM, or LOW")
+    bbox: List[float] = Field(default_factory=list)
+    model_id: str
+    model_class: str
+    agent_id: str
+    agent_name: str
+    is_valid: bool = True
+    model_provenance: Optional[Dict[str, Any]] = None
+class ValidationResult(BaseModel):
+    query: str
+    query_type: str
+    validated_detections: List[ValidatedDetection] = Field(default_factory=list)
+    invalid_or_unsupported: List[Dict[str, Any]] = Field(default_factory=list)
+    is_target_model_missing: bool = False
+    target_class: Optional[str] = None
+    unrelated_detected_classes: List[str] = Field(default_factory=list)
+    refusal_reason: Optional[str] = None
+class DetectionValidator:
+    """
+    Detection Validator for VisionIQ.
+    Enforces strict model provenance, prevents unsupported semantic conversions,
+    and flags when a user requests domain objects (e.g. 'machine') that the executing model
+    does not support.
+    """
+    def __init__(self):
+        pass
+    def validate(
+        self,
+        query: str,
+        query_type: str,
+        agent_results: List[AgentExecutionResult]
+    ) -> ValidationResult:
+        query_lower = query.lower().strip()
+        validated: List[ValidatedDetection] = []
+        invalid: List[Dict[str, Any]] = []
+        # 1. Process and validate all agent detections against model registry
+        for res in agent_results:
+            meta = res.metadata or {}
+            detections = meta.get("detections", [])
+            # Check if agent reported model_unavailable status
+            if meta.get("status") == "model_unavailable":
+                continue
+            for d in detections:
+                cls_name = d.get("class", "object")
+                conf = float(d.get("confidence", 0.0))
+                agent_model_map = {
+                    "object_detection": "general_yolo_coco",
+                    "industrial_object_detection": "industrial_yolo",
+                    "defect_detection": "defect_yolo",
+                    "ocr": "paddle_ocr",
+                    "open_vocabulary_detection": "open_vocabulary_detector"
+                }
+                default_model = agent_model_map.get(res.agent_id, res.agent_id)
+                model_id = d.get("model_id", default_model)
+                model_cls = d.get("model_class", cls_name)
+                bbox = d.get("bbox", [])
+                prov = d.get("provenance")
+                # Verify class support in model registry
+                is_supported = model_registry.is_class_supported(model_id, model_cls)
+                # Categorize confidence tier
+                if conf >= getattr(settings, "CONFIDENCE_THRESHOLD_HIGH", 0.80):
+                    tier = "HIGH"
+                elif conf >= getattr(settings, "CONFIDENCE_THRESHOLD_MEDIUM", 0.50):
+                    tier = "MEDIUM"
+                else:
+                    tier = "LOW"
+                v_item = ValidatedDetection(
+                    class_name=cls_name,
+                    confidence=conf,
+                    confidence_tier=tier,
+                    bbox=bbox,
+                    model_id=model_id,
+                    model_class=model_cls,
+                    agent_id=res.agent_id,
+                    agent_name=res.agent_name,
+                    is_valid=is_supported,
+                    model_provenance=prov
+                )
+                if is_supported:
+                    validated.append(v_item)
+                else:
+                    invalid.append({
+                        "detection": d,
+                        "agent_id": res.agent_id,
+                        "reason": f"Class '{model_cls}' is not declared in supported_classes for model '{model_id}'"
+                    })
+        # 2. Check for Target Class Unsupported Semantic Shift
+        is_target_model_missing = False
+        target_class = None
+        unrelated_classes = []
+        refusal_reason = None
+        # Check if query requests industrial machine identification
+        if any(k in query_lower for k in ["machine", "machines", "equipment", "conveyor", "forklift"]):
+            target_class = "machine"
+            ind_model = model_registry.get_model("industrial_yolo")
+            # Check if industrial model was unavailable or not executed
+            ind_executed = any(r.agent_id == "industrial_object_detection" and (r.metadata or {}).get("status") == "completed" for r in agent_results)
+            if not ind_executed or (ind_model and ind_model.status != "available"):
+                is_target_model_missing = True
+                # Collect what general detector actually found
+                unrelated_classes = list(set([v.class_name for v in validated if v.class_name.lower() not in ("machine", "worker", "forklift", "conveyor")]))
+                refusal_reason = (
+                    f"The requested industrial class '{target_class}' is not supported by the general-purpose model. "
+                    f"The general detector identified objects classified as {', '.join([f'\'{c}\'' for c in unrelated_classes]) if unrelated_classes else 'non-industrial objects'}, "
+                    f"which VisionIQ will not reclassify as '{target_class}'."
+                )
+        return ValidationResult(
+            query=query,
+            query_type=query_type,
+            validated_detections=validated,
+            invalid_or_unsupported=invalid,
+            is_target_model_missing=is_target_model_missing,
+            target_class=target_class,
+            unrelated_detected_classes=unrelated_classes,
+            refusal_reason=refusal_reason
+        )
+detection_validator = DetectionValidator()
+APPENDIX B
+SNAPSHOTS
+APPENDIX B
+SNAPSHOTS
+Table B.1 defines the key terms used in this report.
+Term
+Meaning
+Agent
+A specialist component that produces one kind of evidence, for example object detection or OCR.
+Shared state
+The data structure passed between workflow nodes, holding the query, intent labels, selected agents, outputs and errors.
+Conditional edge
+A workflow transition chosen at run time from the current state.
+Routing score
+The value S(a, q) used to decide whether an agent is selected.
+Provenance
+The recorded link between a piece of evidence and the agent that produced it.
+Deterministic fallback
+Rule-based routing used when LLM intent classification fails or is unusable.
+Graceful degradation
+Returning a partial, qualified answer when some agents fail.
+Fixed pipeline
+A design that runs the same set of modules for every request.
+Table B.1 Glossary of key terms
+APPENDIX C
+PROJECT TEAM DETAILS
+APPENDIX C
+PROJECT TEAM DETAILS
+Table C.1 reproduces the team details from the source conference paper.
+Role
+Name
+ID
+Email
+Guide (first author)
+Ms. GAYATHRI S
+Assistant Professor (AP), CSE
+—
+gayathriraj2605@gmail.com
+Student 1
+Gayathri R
+727623BCS065
+gayathriraj2605@gmail.com
+Student 2
+Monica T S
+727623BCS083
+727623bcs083@mcet.in
+Student 3
+Dhamodharan R
+727624BCS308
+727624bcs308@mcet.in
+Table C.1 Project team details

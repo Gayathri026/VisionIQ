@@ -1,0 +1,32 @@
+# Python virtual environment and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+
+# Node and frontend artifacts
+node_modules/
+dist/
+build/
+.npm/
+
+# Environment files and credentials
+.env
+*.local
+credentials.json
+
+# VisionIQ Storage and database
+storage/uploads/*
+!storage/uploads/.gitkeep
+storage/reports/*
+!storage/reports/.gitkeep
+visioniq.db
+*.sqlite3
+
+# OS metadata
+.DS_Store
+Thumbs.db

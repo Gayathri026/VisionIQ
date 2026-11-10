@@ -1,0 +1,13 @@
+Metric,Config A: Fixed Pipeline,Config B: Query-Aware Routing (No Cost),Config C: Full VisionIQ (Adaptive),Heuristic Rule-Based Router (Reference)
+Test image-query pairs,24,24,24,24
+Detection precision / recall / mAP,0.000 / 0.000 / 0.000 (100% invoked),0.000 / 0.000 / 0.000 (70.8% invoked),0.000 / 0.000 / 0.000 (58.3% invoked),0.000 / 0.000 / 0.000 (45.8% invoked)
+OCR CER / WER (Matched / All Text Queries),0.000/0.000 (100% invoked),0.000/0.000 (29.2% invoked),0.000/0.000 (25.0% invoked),0.000/0.000 (25.0% invoked)
+Routing precision,0.1719 (n/a),0.5590,0.5764,0.5069
+Routing recall,1.0000,0.8056,0.7222,0.7153
+Routing F1-score,0.2875,0.5788,0.5806,0.5433
+Median latency (ms),2639.46,2755.52,2721.26,2667.03
+p95 tail latency (ms),6699.12,3289.77,2995.04,3203.41
+Mean agents invoked per query,8.00,3.62,3.17,2.12
+Evidence support score,0.7222,0.7222,0.7222,0.7222
+Answer correctness,0.6250,0.6250,0.6250,0.6250
+Completion / fallback / degradation rate,100.0% / 0.0% / 100.0%,100.0% / 8.33% / 100.0%,100.0% / 8.33% / 100.0%,100.0% / 0.0% / 100.0%

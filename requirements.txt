@@ -1,0 +1,23 @@
+# VisionIQ Pinned Dependency Manifest
+# Python 3.12 compatible
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+sqlalchemy==2.0.35
+python-multipart==0.0.12
+pillow==10.4.0
+torch==2.4.1
+torchvision==0.19.1
+ultralytics==8.3.0
+opencv-python-headless==4.11.0.86
+easyocr==1.7.2
+scikit-learn==1.5.2
+scipy==1.17.1
+numpy==1.26.4
+faiss-cpu==1.8.0
+langgraph==0.2.20
+reportlab==5.1.0
+pytest==8.3.3
+requests==2.32.3
+aiofiles==24.1.0

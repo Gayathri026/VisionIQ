@@ -1,0 +1,3 @@
+SOP-401: Hydraulic press daily inspection checklist.
+
+Verify fluid level and emergency stop switch.

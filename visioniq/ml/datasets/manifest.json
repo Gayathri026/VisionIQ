@@ -1,0 +1,81 @@
+{
+  "manifest_version": "1.0.0",
+  "project": "VisionIQ: Adaptive Multi-Agent Vision Intelligence Framework",
+  "academic_institution": "Dr. Mahalingam College of Engineering and Technology",
+  "target_venue": "IEEE Access",
+  "generated_at": "2026-10-25T20:30:00Z",
+  "datasets": {
+    "construction_site_safety": {
+      "dataset_name": "Construction Site Safety Image Dataset",
+      "version": "v1.0-roboflow",
+      "source_url": "https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow",
+      "license": "CC BY 4.0",
+      "task_type": "object_detection",
+      "annotation_format": "yolo_v11_normalized",
+      "num_classes": 10,
+      "classes": [
+        "Hardhat",
+        "Mask",
+        "NO-Hardhat",
+        "NO-Mask",
+        "NO-Safety Vest",
+        "Person",
+        "Safety Cone",
+        "Safety Vest",
+        "machinery",
+        "vehicle"
+      ],
+      "split_ratios": {
+        "train": 0.70,
+        "valid": 0.20,
+        "test": 0.10
+      },
+      "leakage_prevention_method": "group_by_session_prefix",
+      "integrity_hash_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "ready"
+    },
+    "neu_surface_defect": {
+      "dataset_name": "NEU Surface Defect Database",
+      "version": "v1.0-song-yan-2013",
+      "source_url": "https://www.kaggle.com/datasets/kaustubhdikshit/neu-surface-defect-database",
+      "license": "Academic Research Use Permitted",
+      "task_type": "image_classification",
+      "annotation_format": "folder_per_class",
+      "num_classes": 6,
+      "classes": [
+        "crazing",
+        "inclusion",
+        "patches",
+        "pitted_surface",
+        "rolled-in_scale",
+        "scratches"
+      ],
+      "image_dimensions": [200, 200, 1],
+      "samples_per_class": 300,
+      "total_samples": 1800,
+      "split_ratios": {
+        "train": 0.70,
+        "valid": 0.15,
+        "test": 0.15
+      },
+      "leakage_prevention_method": "stratified_independent_strip_sampling",
+      "integrity_hash_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+      "status": "ready"
+    },
+    "mvtec_ad_benchmark": {
+      "dataset_name": "MVTec Anomaly Detection Dataset",
+      "version": "v1.0-bergmann-2019",
+      "source_url": "https://www.mvtec.com/research-teaching/datasets/mvtec-ad",
+      "license": "CC BY-NC-SA 4.0",
+      "task_type": "anomaly_localization",
+      "annotation_format": "pixel_groundtruth_masks",
+      "categories_count": 15,
+      "evaluation_metrics": [
+        "Image-AUROC",
+        "Pixel-AUROC",
+        "PRO-Score"
+      ],
+      "status": "calibration_reference"
+    }
+  }
+}

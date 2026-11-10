@@ -1,0 +1,12 @@
+names:
+- crazing
+- inclusion
+- patches
+- pitted_surface
+- rolled-in_scale
+- scratches
+nc: 6
+path: C:\Users\w11 3\OneDrive\Desktop\gmd_final_year_proj\visioniq\ml\datasets\neu_surface_defect
+test: test
+train: train
+val: valid

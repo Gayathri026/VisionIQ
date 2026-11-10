@@ -1,0 +1,362 @@
+[
+  {
+    "id": "TC-PPE-01",
+    "session_id": "session_ppe_site_01",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_00.png",
+    "query": "Check whether personnel are wearing hard hats and safety vests.",
+    "ground_truth_intent": "ppe_safety",
+    "required_agents": ["ppe"],
+    "ground_truth_labels": ["person", "hard_hat", "safety_vest"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "PPE compliance audit",
+      "expected_evidence": "Identification of head and torso PPE compliance status",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-PPE-02",
+    "session_id": "session_ppe_site_01",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_01.png",
+    "query": "Detect any OSHA head protection violations in this work area.",
+    "ground_truth_intent": "ppe_safety",
+    "required_agents": ["ppe"],
+    "ground_truth_labels": ["person", "NO-Hardhat"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Hard hat violation detection",
+      "expected_evidence": "Detection of worker lacking certified helmet",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-PPE-03",
+    "session_id": "session_ppe_site_01",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_00.png",
+    "query": "Verify high-visibility vest compliance for workers on site.",
+    "ground_truth_intent": "ppe_safety",
+    "required_agents": ["ppe"],
+    "ground_truth_labels": ["safety_vest"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "High-vis vest compliance",
+      "expected_evidence": "Torso zone reflective garment detection",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-PPE-04",
+    "session_id": "session_ppe_site_01",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_01.png",
+    "query": "Count the number of individuals and inspect their safety gear.",
+    "ground_truth_intent": "ppe_safety",
+    "required_agents": ["ppe", "object"],
+    "ground_truth_labels": ["person", "hard_hat"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Worker count with safety gear audit",
+      "expected_evidence": "Person bounding boxes and PPE status attribution",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-PPE-05",
+    "session_id": "session_ppe_site_01",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_00.png",
+    "query": "Is the worker properly protected against impact hazards?",
+    "ground_truth_intent": "ppe_safety",
+    "required_agents": ["ppe"],
+    "ground_truth_labels": ["hard_hat"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Impact hazard PPE assessment",
+      "expected_evidence": "Hard hat detection in cranial zone",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-DEF-01",
+    "session_id": "session_steel_mill_02",
+    "image_path": "ml/datasets/neu_surface_defect/valid/crazing/crazing_sample_00.jpg",
+    "query": "Inspect this cold-rolled steel surface for crazing micro-cracks.",
+    "ground_truth_intent": "industrial_defect",
+    "required_agents": ["defect"],
+    "ground_truth_labels": ["crazing"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Crazing crack network classification",
+      "expected_evidence": "Fissure network detection with NEU-DefectNet activation",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-DEF-02",
+    "session_id": "session_steel_mill_02",
+    "image_path": "ml/datasets/neu_surface_defect/valid/scratches/scratches_sample_00.jpg",
+    "query": "Identify any surface scratches or mechanical gouges on the sheet.",
+    "ground_truth_intent": "industrial_defect",
+    "required_agents": ["defect"],
+    "ground_truth_labels": ["scratches"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Scratch defect detection",
+      "expected_evidence": "Linear abrasion identification",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-DEF-03",
+    "session_id": "session_steel_mill_02",
+    "image_path": "ml/datasets/neu_surface_defect/valid/pitted_surface/pitted_surface_sample_00.jpg",
+    "query": "Check the metal surface for localized corrosion pitting or cavities.",
+    "ground_truth_intent": "industrial_defect",
+    "required_agents": ["defect"],
+    "ground_truth_labels": ["pitted_surface"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Pitting defect detection",
+      "expected_evidence": "Depression and crater cavity classification",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-DEF-04",
+    "session_id": "session_steel_mill_02",
+    "image_path": "ml/datasets/neu_surface_defect/valid/inclusion/inclusion_sample_00.jpg",
+    "query": "Detect foreign non-metallic inclusions embedded in the steel plate.",
+    "ground_truth_intent": "industrial_defect",
+    "required_agents": ["defect"],
+    "ground_truth_labels": ["inclusion"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Inclusion particle classification",
+      "expected_evidence": "Non-metallic particle boundary detection",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-DEF-05",
+    "session_id": "session_steel_mill_02",
+    "image_path": "ml/datasets/neu_surface_defect/valid/patches/patches_sample_00.jpg",
+    "query": "Diagnose structural patch irregularities on the metal surface.",
+    "ground_truth_intent": "industrial_defect",
+    "required_agents": ["defect"],
+    "ground_truth_labels": ["patches"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Patch defect detection",
+      "expected_evidence": "Non-uniform localized oxidation patch identification",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-OCR-01",
+    "session_id": "session_ocr_equipment_03",
+    "image_path": "experiments/benchmark/fixtures/ocr_safety_sign.png",
+    "query": "Read the warning sign text and regulatory compliance notice.",
+    "ground_truth_intent": "ocr_inspection",
+    "required_agents": ["ocr"],
+    "ground_truth_labels": null,
+    "reference_text": "CAUTION HARD HAT REQUIRED IN THIS WORK AREA OSHA 1926.100 COMPLIANT",
+    "rubric": {
+      "target_concept": "Warning sign OCR extraction",
+      "expected_evidence": "Decoded textual strings matching OSHA 1926.100",
+      "mandatory_agent": "ocr"
+    }
+  },
+  {
+    "id": "TC-OCR-02",
+    "session_id": "session_ocr_equipment_03",
+    "image_path": "experiments/benchmark/fixtures/ocr_nameplate.png",
+    "query": "Extract the machine serial number and rated voltage from the plate.",
+    "ground_truth_intent": "ocr_inspection",
+    "required_agents": ["ocr"],
+    "ground_truth_labels": null,
+    "reference_text": "MODEL CNC-4500X SERIAL NO SN-2026-9842A VOLTAGE 480V",
+    "rubric": {
+      "target_concept": "Nameplate specification extraction",
+      "expected_evidence": "Accurate extraction of serial number SN-2026-9842A",
+      "mandatory_agent": "ocr"
+    }
+  },
+  {
+    "id": "TC-OCR-03",
+    "session_id": "session_ocr_equipment_03",
+    "image_path": "experiments/benchmark/fixtures/ocr_safety_sign.png",
+    "query": "What industrial station number is printed at the bottom of the sign?",
+    "ground_truth_intent": "ocr_inspection",
+    "required_agents": ["ocr"],
+    "ground_truth_labels": null,
+    "reference_text": "STATION #04 - MCET INDUSTRIAL LAB",
+    "rubric": {
+      "target_concept": "Station identifier reading",
+      "expected_evidence": "Station #04 label extracted",
+      "mandatory_agent": "ocr"
+    }
+  },
+  {
+    "id": "TC-OCR-04",
+    "session_id": "session_ocr_equipment_03",
+    "image_path": "experiments/benchmark/fixtures/ocr_nameplate.png",
+    "query": "Read the certified engineering safety standard on this machine.",
+    "ground_truth_intent": "ocr_inspection",
+    "required_agents": ["ocr"],
+    "ground_truth_labels": null,
+    "reference_text": "ISO 13849 / CE",
+    "rubric": {
+      "target_concept": "ISO certification string extraction",
+      "expected_evidence": "ISO 13849 certification tag read",
+      "mandatory_agent": "ocr"
+    }
+  },
+  {
+    "id": "TC-SCN-01",
+    "session_id": "session_factory_overview_04",
+    "image_path": "sample_data/FACTORY_SCENE.png",
+    "query": "Describe the factory floor context and list visible machinery.",
+    "ground_truth_intent": "general_scene",
+    "required_agents": ["scene", "object"],
+    "ground_truth_labels": ["machinery", "factory_floor"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Factory scene interpretation",
+      "expected_evidence": "Contextual description of workshop environment",
+      "mandatory_agent": "scene"
+    }
+  },
+  {
+    "id": "TC-SCN-02",
+    "session_id": "session_factory_overview_04",
+    "image_path": "sample_data/high-tech-cnc-machine.jpg",
+    "query": "Identify the primary manufacturing machine and its physical enclosure.",
+    "ground_truth_intent": "general_scene",
+    "required_agents": ["object"],
+    "ground_truth_labels": ["cnc_machine"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Machine localization",
+      "expected_evidence": "Bounding coordinates of CNC unit",
+      "mandatory_agent": "object"
+    }
+  },
+  {
+    "id": "TC-SCN-03",
+    "session_id": "session_factory_overview_04",
+    "image_path": "sample_data/FACTORY_SCENE.png",
+    "query": "Count all visible operators and workstations in this view.",
+    "ground_truth_intent": "general_scene",
+    "required_agents": ["object"],
+    "ground_truth_labels": ["person"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Operator counting",
+      "expected_evidence": "Enumeration of visible workers",
+      "mandatory_agent": "object"
+    }
+  },
+  {
+    "id": "TC-SCN-04",
+    "session_id": "session_factory_overview_04",
+    "image_path": "sample_data/FACTORY_SCENE.png",
+    "query": "Provide an environmental hazard overview of this industrial facility.",
+    "ground_truth_intent": "general_scene",
+    "required_agents": ["scene"],
+    "ground_truth_labels": null,
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Environmental safety assessment",
+      "expected_evidence": "Overview of aisle clearance and lighting",
+      "mandatory_agent": "scene"
+    }
+  },
+  {
+    "id": "TC-HYB-01",
+    "session_id": "session_hybrid_inspection_05",
+    "image_path": "experiments/benchmark/fixtures/hybrid_lathe_inspection.png",
+    "query": "Detect surface scratches and read the caution label on the machine.",
+    "ground_truth_intent": "hybrid",
+    "required_agents": ["defect", "ocr"],
+    "ground_truth_labels": ["scratches"],
+    "reference_text": "DANGER: HIGH VOLTAGE",
+    "rubric": {
+      "target_concept": "Dual defect & OCR inspection",
+      "expected_evidence": "Scratch identification plus text extraction of warning",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-HYB-02",
+    "session_id": "session_hybrid_inspection_05",
+    "image_path": "ml/datasets/construction_ppe/images/test/session_01_worker_00.png",
+    "query": "Verify PPE compliance and cite the relevant OSHA head protection standard.",
+    "ground_truth_intent": "hybrid",
+    "required_agents": ["ppe", "rag"],
+    "ground_truth_labels": ["person", "hard_hat"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "PPE compliance with regulatory RAG grounding",
+      "expected_evidence": "PPE status correlated with OSHA 1926.100 passage",
+      "mandatory_agent": "ppe"
+    }
+  },
+  {
+    "id": "TC-HYB-03",
+    "session_id": "session_hybrid_inspection_05",
+    "image_path": "ml/datasets/neu_surface_defect/valid/crazing/crazing_sample_00.jpg",
+    "query": "Classify the surface steel defect and retrieve ASTM A568 tolerance limits.",
+    "ground_truth_intent": "hybrid",
+    "required_agents": ["defect", "rag"],
+    "ground_truth_labels": ["crazing"],
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Defect classification with ASTM standards grounding",
+      "expected_evidence": "Crazing defect confirmed plus ASTM A568 citation",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-HYB-04",
+    "session_id": "session_hybrid_inspection_05",
+    "image_path": "experiments/benchmark/fixtures/hybrid_lathe_inspection.png",
+    "query": "Examine the lathe workstation, extract caution text, and inspect for scratches.",
+    "ground_truth_intent": "hybrid",
+    "required_agents": ["defect", "ocr", "scene"],
+    "ground_truth_labels": ["scratches"],
+    "reference_text": "DANGER: HIGH VOLTAGE",
+    "rubric": {
+      "target_concept": "Multi-agent scene, defect, and OCR fusion",
+      "expected_evidence": "Simultaneous execution of defect, OCR, and scene agents",
+      "mandatory_agent": "defect"
+    }
+  },
+  {
+    "id": "TC-AMB-01",
+    "session_id": "session_ambiguous_edge_06",
+    "image_path": "sample_data/FACTORY_SCENE.png",
+    "query": "What is visible here?",
+    "ground_truth_intent": "ambiguous",
+    "required_agents": ["object", "scene"],
+    "ground_truth_labels": null,
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Conservative fallback for open-ended query",
+      "expected_evidence": "Fallback to basic object detection and scene context",
+      "mandatory_agent": "object"
+    }
+  },
+  {
+    "id": "TC-AMB-02",
+    "session_id": "session_ambiguous_edge_06",
+    "image_path": "sample_data/test_img1.png",
+    "query": "Perform general visual inspection.",
+    "ground_truth_intent": "ambiguous",
+    "required_agents": ["object", "scene"],
+    "ground_truth_labels": null,
+    "reference_text": null,
+    "rubric": {
+      "target_concept": "Unspecified inspection fallback",
+      "expected_evidence": "Safe fallback without hallucinating specialist agents",
+      "mandatory_agent": "object"
+    }
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "registry_version": "1.0.0",
+  "project": "VisionIQ: Adaptive Multi-Agent Vision Intelligence Framework",
+  "last_updated": "2026-10-25T20:35:00Z",
+  "models": {
+    "ppe_detector": {
+      "model_id": "visioniq-ppe-yolo11n-v1",
+      "model_name": "VisionIQ PPE & Safety Compliance Detector",
+      "task_type": "object_detection",
+      "architecture": "Ultralytics YOLO11n",
+      "checkpoint_path": "visioniq/ml/model_registry/yolo_ppe.pt",
+      "backend_deploy_path": "visioniq/backend/app/models/yolo_ppe.pt",
+      "input_resolution": [640, 640, 3],
+      "input_normalization": "[0.0, 1.0]",
+      "total_parameters": 2600000,
+      "format": "PyTorch (.pt)",
+      "classes": [
+        "Hardhat",
+        "Mask",
+        "NO-Hardhat",
+        "NO-Mask",
+        "NO-Safety Vest",
+        "Person",
+        "Safety Cone",
+        "Safety Vest",
+        "machinery",
+        "vehicle"
+      ],
+      "dataset_source": "Roboflow Construction Site Safety (CC BY 4.0)",
+      "intended_use": "Detecting PPE compliance and hazard zones on industrial and construction sites",
+      "license": "CC BY 4.0",
+      "hardware_target": "CPU / CUDA Edge or Cloud Server"
+    },
+    "defect_classifier": {
+      "model_id": "visioniq-neu-defectnet-v1",
+      "model_name": "VisionIQ Industrial Surface Defect Classifier",
+      "task_type": "multi_class_classification",
+      "architecture": "IndustrialDefectNet (3-stage ConvNet + BatchNorm + AdaptiveAvgPool + Linear Classifier)",
+      "checkpoint_path": "visioniq/ml/model_registry/neu_defect_classifier.pt",
+      "backend_deploy_path": "visioniq/backend/app/models/defect_model.pt",
+      "input_resolution": [200, 200, 3],
+      "input_normalization": "ImageNet (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])",
+      "total_parameters": 298438,
+      "format": "PyTorch State Dict (.pt)",
+      "classes": [
+        "crazing",
+        "inclusion",
+        "patches",
+        "pitted_surface",
+        "rolled-in_scale",
+        "scratches"
+      ],
+      "dataset_source": "Northeastern University (NEU) Surface Defect Database",
+      "intended_use": "Automated visual surface defect classification for hot-rolled steel strip quality assurance",
+      "license": "Academic Research Use",
+      "hardware_target": "CPU / Edge TPU / Jetson Orin / Industrial IPC"
+    },
+    "anomaly_localizer": {
+      "model_id": "visioniq-mvtec-patchcore-v1",
+      "model_name": "VisionIQ Industrial Anomaly Localizer",
+      "task_type": "continuous_anomaly_localization",
+      "architecture": "Memory-Bank Coreset Patch-Embedding Localizer (ResNet/WideResNet Backbone)",
+      "checkpoint_path": "visioniq/ml/model_registry/mvtec_anomaly_detector.pt",
+      "backend_deploy_path": "visioniq/backend/app/models/anomaly_detector.pt",
+      "input_resolution": [224, 224, 3],
+      "input_normalization": "ImageNet (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])",
+      "total_parameters": 11200000,
+      "format": "PyTorch State Dict / Feature Memory Bank",
+      "classes": [
+        "good",
+        "anomaly"
+      ],
+      "dataset_source": "MVTec Anomaly Detection (MVTec AD) Benchmark",
+      "intended_use": "Unsupervised visual inspection and pixel-level continuous anomaly localization on manufacturing items",
+      "license": "CC BY-NC-SA 4.0",
+      "hardware_target": "CPU / CUDA Server"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+names:
+- Hardhat
+- Mask
+- NO-Hardhat
+- NO-Mask
+- NO-Safety Vest
+- Person
+- Safety Cone
+- Safety Vest
+- machinery
+- vehicle
+nc: 10
+path: C:\Users\w11 3\OneDrive\Desktop\gmd_final_year_proj\visioniq\ml\datasets\construction_ppe
+test: images/test
+train: images/train
+val: images/valid
